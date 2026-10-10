@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Armar el zip del sitio
+        run: zip -r "manual-de-usagi-${GITHUB_REF_NAME}.zip" index.html css js assets
+
+      - name: Publicar la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "manual-de-usagi-${GITHUB_REF_NAME}.zip" \
+            --title "Manual de Usagi ${GITHUB_REF_NAME}" \
+            --notes-file .github/release-notes.md \
+            --verify-tag

@@ -563,15 +563,11 @@
       goNext(i);
     };
     $("#memeOk", body).addEventListener("click", finish);
-    let lied = false;
-    $("#memeNo", body).addEventListener("click", (e) => {
-      if (!lied) {
-        lied = true;
-        setFeedback(fb, "Mentira. Te reíste. Lo sé.", "bad");
-        e.currentTarget.textContent = "Bueno, sí me reí";
-        return;
-      }
-      finish();
+    $("#memeNo", body).addEventListener("click", () => {
+      $("#memeOk", body).disabled = true;
+      $("#memeNo", body).disabled = true;
+      setFeedback(fb, "Error: sentido del humor no encontrado. Reiniciando todo por boluda…", "bad");
+      setTimeout(resetProgress, 2800);
     });
   }
 
@@ -743,14 +739,15 @@
   });
 
   // ---------- Reinicio ----------
+  function resetProgress() {
+    try { localStorage.removeItem(KEY); } catch (err) { /* nada que borrar */ }
+    location.reload();
+  }
+
   let resetArmed = 0;
   $("#resetBtn").addEventListener("click", (e) => {
     const b = e.currentTarget;
-    if (Date.now() - resetArmed < 4000) {
-      try { localStorage.removeItem(KEY); } catch (err) { /* nada que borrar */ }
-      location.reload();
-      return;
-    }
+    if (Date.now() - resetArmed < 4000) return resetProgress();
     resetArmed = Date.now();
     b.textContent = "¿Seguro? Tocá de nuevo para borrar todo";
     setTimeout(() => { b.textContent = "Reiniciar progreso"; }, 4000);
