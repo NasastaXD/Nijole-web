@@ -7,6 +7,7 @@
  *   meme       → imagen chistosa de intermedio
  *   rickroll   → link a YouTube que hay que abrir para pasar
  *   poema      → texto libre con validación
+ *   jefe       → jefe intermedio: la novela visual de "facu" (más abajo)
  * Para agregar más memes: copiá un bloque { tipo: "meme", ... }, poné la imagen en assets/memes/
  * y cambiá "imagen". "texto" es opcional. Cada bloque nuevo es una rosa más; el orden de la lista es el orden del juego.
  */
@@ -122,6 +123,12 @@ window.CONFIG = {
       texto: "Hablando de poesía…",
     },
     {
+      tipo: "jefe",
+      tema: "Jefe intermedio",
+      titulo: "Facu-lo",
+      sprite: "assets/facu-lo.png",
+    },
+    {
       tipo: "respuesta",
       tema: "Precálculo",
       titulo: "Raíces sospechosas",
@@ -166,6 +173,144 @@ window.CONFIG = {
     segundos: 60,
     pesoInicial: 10,
     pesoMeta: 100,
+  },
+
+  // Jefe intermedio: novela visual de decisiones.
+  //  · Seguir con él pierde (reintenta la pelea).
+  //  · Terminar de migajera borra todo el progreso.
+  //  · Cortar con DIGNIDAD suficiente pasa al siguiente nivel.
+  // Cada línea es [quién, texto]: "narr" (narrador), "facu" o "vos". Un tercer valor opcional
+  // dispara una reacción del sprite: "shake", "jump", "slump" o "flush".
+  // "ir" apunta a otra escena, o a un final con "fin:ganar", "fin:seguir" o "fin:migajera".
+  facu: {
+    nombre: "Facu-lo",
+    dignidadInicial: 50,
+    dignidadParaCortar: 60,
+    inicio: "inicio",
+    escenas: {
+      inicio: {
+        lineas: [
+          ["narr", "* Un olor conocido se mete entre las rosas."],
+          ["narr", "* ¡Facu-lo apareció!", "jump"],
+          ["facu", "Holaaa. Estaba pensando en vos. Bueno, en vos y en la playlist de las 3 am."],
+        ],
+        opciones: [
+          { texto: "Hola, Facu. ¿Qué querés?", dignidad: 0, ir: "queria" },
+          { texto: "Visto.", dignidad: 15, ir: "visto" },
+          { texto: "¡Yo también te extrañé!", dignidad: -15, ir: "extranar" },
+        ],
+      },
+      visto: {
+        lineas: [
+          ["narr", "* Lo dejaste en visto. Facu-lo se pone nervioso.", "shake"],
+          ["facu", "¿Ya me ignorás? Yo solo quería saber si estabas bien... y si todavía tenés mi buzo."],
+        ],
+        opciones: [
+          { texto: "El buzo lo quemé en una fogata.", dignidad: 15, ir: "etapa" },
+          { texto: "Tomá, te lo llevo. Total nos vemos un ratito.", dignidad: -15, ir: "extranar" },
+        ],
+      },
+      extranar: {
+        lineas: [
+          ["facu", "Ay, yo también. Qué linda que sos. Che, ¿y si nos vemos? Sin compromiso, obvio. Yo no estoy para compromisos."],
+        ],
+        opciones: [
+          { texto: "Dale, sin compromiso.", ir: "fin:migajera" },
+          { texto: "Esperá. ¿Sin compromiso? Repetime eso.", dignidad: 10, ir: "queria" },
+          { texto: "Jajaja, ¿en serio? Chau.", dignidad: 10, ir: "etapa" },
+        ],
+      },
+      queria: {
+        lineas: [
+          ["facu", "Nada, nada. Solo quería contarte que cambié. Ahora medito. Bueno, lo intenté una vez."],
+        ],
+        opciones: [
+          { texto: "¿Cambiaste? ¿Entonces ya contestás los mensajes en menos de tres días?", dignidad: 10, ir: "etapa" },
+          { texto: "¿En serio cambiaste? Qué lindo...", dignidad: -10, ir: "creer" },
+          { texto: "Mostrame el certificado de cambio.", dignidad: 5, ir: "etapa" },
+        ],
+      },
+      creer: {
+        lineas: [
+          ["facu", "En serio. Dame otra chance y te prometo una versión mejorada. Facu-lo 2.0."],
+        ],
+        opciones: [
+          { texto: "Bueno... una chance más.", ir: "fin:seguir" },
+          { texto: "Facu-lo 2.0 sigue siendo Facu-lo.", dignidad: 15, ir: "etapa" },
+          { texto: "¿Y si somos amigos? Pero amigos que se besan.", ir: "fin:migajera" },
+        ],
+      },
+      etapa: {
+        lineas: [
+          ["narr", "* Facu-lo cambia de estrategia."],
+          ["facu", "Mirá, yo te quiero, pero no estoy listo. Es que estoy en mi etapa. No es por vos, es por mí. Es por mi signo."],
+        ],
+        opciones: [
+          { texto: "No sos vos, soy yo... ah no, sos vos.", dignidad: 10, ir: "historia" },
+          { texto: "Entiendo. Te espero hasta que estés listo.", ir: "fin:migajera" },
+          { texto: "¿Tu etapa tiene fecha de vencimiento?", dignidad: 10, ir: "historia" },
+        ],
+      },
+      historia: {
+        lineas: [
+          ["facu", "Ayer vi tu historia y le puse un corazón. ¿Eso no cuenta como que me importás?"],
+        ],
+        opciones: [
+          { texto: "Un corazón de Instagram no es amor, Facu.", dignidad: 10, ir: "culpa" },
+          { texto: "Ay, es verdad, me puso un corazón...", dignidad: -15, ir: "culpa" },
+          { texto: "Yo también te puse corazones, ¡mirá!", dignidad: -10, ir: "culpa" },
+        ],
+      },
+      culpa: {
+        lineas: [
+          ["narr", "* Facu-lo se pone dramático.", "slump"],
+          ["facu", "Sin vos no soy nadie. Bueno, soy alguien, pero un alguien triste. Y con ojeras."],
+        ],
+        opciones: [
+          { texto: "Eso no es mi problema.", dignidad: 15, ir: "final" },
+          { texto: "Pobrecito, no llores...", dignidad: -10, ir: "final" },
+          { texto: "Te preparo unos fideos.", dignidad: -15, ir: "final" },
+        ],
+      },
+      final: {
+        lineas: [
+          ["narr", "* Facu-lo se quedó sin excusas."],
+          ["facu", "Entonces... ¿qué hacemos? ¿Volvemos?"],
+        ],
+        opciones: [
+          { texto: "Sí, volvamos.", ir: "fin:seguir" },
+          { texto: "Quedemos como «algo». Sin etiquetas.", ir: "fin:migajera" },
+          { texto: "Se terminó, Facu. Chau.", requiere: 60, ir: "fin:ganar" },
+        ],
+      },
+    },
+    finales: {
+      ganar: {
+        titulo: "¡Terminaste con Facu-lo!",
+        lineas: [
+          ["facu", "¿Me estás cortando? Pero si yo ni te dije que éramos algo."],
+          ["narr", "* Exacto."],
+          ["narr", "* Facu-lo fue arrastrado por la cadena del baño.", "flush"],
+          ["narr", "* Ganaste. Tu DIGNIDAD quedó intacta."],
+        ],
+      },
+      seguir: {
+        titulo: "GAME OVER",
+        texto: "Seguiste con Facu-lo. Perdiste.",
+        lineas: [
+          ["narr", "* Volviste con Facu-lo."],
+          ["narr", "* A los tres días te dejó en visto.", "slump"],
+        ],
+      },
+      migajera: {
+        titulo: "MIGAJERA",
+        texto: "Perdiste todo tu progreso.",
+        lineas: [
+          ["narr", "* Terminaste de migajera."],
+          ["narr", "* Meses respondiendo «jajaja» a sus historias de las 3 am.", "jump"],
+        ],
+      },
+    },
   },
 
   // Contenido del PDF. Lo que está entre [corchetes] es para que lo completes vos.

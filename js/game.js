@@ -55,51 +55,8 @@
   }
 
   // ---------- Sonido ----------
-  let actx = null;
-  let muted = false;
-  function tone(freq, t0, dur, type = "square", vol = 0.05, slideTo) {
-    const o = actx.createOscillator();
-    const g = actx.createGain();
-    o.type = type;
-    o.frequency.setValueAtTime(freq, t0);
-    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
-    g.gain.setValueAtTime(vol, t0);
-    g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
-    o.connect(g).connect(actx.destination);
-    o.start(t0);
-    o.stop(t0 + dur + 0.02);
-  }
-  function sfx(kind) {
-    if (muted) return;
-    try {
-      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-      if (actx.state === "suspended") actx.resume();
-    } catch (e) {
-      return;
-    }
-    const t = actx.currentTime;
-    switch (kind) {
-      case "slurp": tone(260, t, 0.09, "sine", 0.05, 820); break;
-      case "yum": tone(520, t, 0.07, "square", 0.04); tone(780, t + 0.07, 0.1, "square", 0.04); break;
-      case "yuck": tone(190, t, 0.28, "sawtooth", 0.045, 70); break;
-      case "ouch": tone(420, t, 0.2, "triangle", 0.06, 140); break;
-      case "bonus": [523, 659, 784, 1046].forEach((f, k) => tone(f, t + k * 0.06, 0.1, "square", 0.04)); break;
-      case "tick": tone(880, t, 0.06, "square", 0.03); break;
-      case "go": tone(1320, t, 0.18, "square", 0.04); break;
-      case "win": [523, 659, 784, 1046, 784, 1046, 1318].forEach((f, k) => tone(f, t + k * 0.11, 0.16, "square", 0.045)); break;
-      case "lose": [392, 330, 262, 196].forEach((f, k) => tone(f, t + k * 0.16, 0.22, "triangle", 0.06)); break;
-      case "betray": tone(220, t, 0.9, "sawtooth", 0.05, 55); tone(110, t + 0.5, 1.2, "square", 0.04, 40); break;
-      case "blip": tone(660, t, 0.03, "square", 0.018); break;
-      case "blipUsagi": tone(330, t, 0.04, "square", 0.022); break;
-      case "move": tone(520, t, 0.04, "square", 0.025); break;
-      case "select": tone(780, t, 0.06, "square", 0.03); break;
-      case "hit": tone(160, t, 0.18, "square", 0.05, 90); break;
-      case "hurt": tone(300, t, 0.14, "sawtooth", 0.06, 120); break;
-      case "heal": [660, 880, 1100].forEach((f, k) => tone(f, t + k * 0.06, 0.08, "triangle", 0.05)); break;
-      case "break": tone(200, t, 0.08, "square", 0.07); tone(140, t + 0.5, 0.3, "sawtooth", 0.06, 50); break;
-      case "spare": [392, 523, 659, 784].forEach((f, k) => tone(f, t + k * 0.12, 0.2, "triangle", 0.05)); break;
-    }
-  }
+  // Los efectos y la música viven en js/audio.js
+  const sfx = (kind) => window.Sound.sfx(kind);
 
   function open({ cfg, stage: bossStage, fails: startFails, battleFails: startBattleFails, done, onPhase1Win, onLose, onBattleLose, onWin, onExit }) {
     const arcade = $("arcade");
@@ -153,6 +110,7 @@
       hud: setHud,
       menu: menuBtns,
       onDeath: () => {
+        window.Sound.music(null);
         mode = "battle-over";
         battleFails++;
         onBattleLose();
@@ -166,6 +124,7 @@
           </div>`);
       },
       onWin: () => {
+        window.Sound.music(null);
         mode = "won";
         sfx("win");
         onWin();
@@ -623,10 +582,12 @@
       tongue.state = "idle";
       tongue.len = 0;
       onPhase1Win(Math.round(kg));
+      window.Sound.music(null);
       sfx("betray");
     }
 
     function enterBattle(firstTime) {
+      window.Sound.music("battle");
       scene = "battle";
       arcade.classList.add("is-battle");
       screen.innerHTML = "";
@@ -664,6 +625,7 @@
     }
 
     function start() {
+      window.Sound.music("invaders");
       reset();
       screen.innerHTML = "";
       mode = "countdown";
@@ -684,6 +646,7 @@
         mode = "play";
         transform();
       } else {
+        window.Sound.music(null);
         sfx("lose");
         fails++;
         onLose();
@@ -823,10 +786,11 @@
 
     const muteBtn = $("arcadeMute");
     const syncMute = () => {
-      muteBtn.textContent = muted ? "Sonido: no" : "Sonido: sí";
-      muteBtn.setAttribute("aria-pressed", String(muted));
+      muteBtn.textContent = window.Sound.muted ? "Sonido: no" : "Sonido: sí";
+      muteBtn.setAttribute("aria-pressed", String(window.Sound.muted));
     };
-    const onMute = () => { muted = !muted; syncMute(); };
+    const onMute = () => window.Sound.toggle();
+    const offMute = window.Sound.onChange(syncMute);
     const onExitBtn = () => close(mode === "won");
     const onMenuClick = (e) => {
       const i = menuBtns.indexOf(e.currentTarget);
@@ -874,6 +838,7 @@
       unpadR();
       firePad.removeEventListener("pointerdown", onFirePad);
       muteBtn.removeEventListener("click", onMute);
+      offMute();
       $("arcadeExit").removeEventListener("click", onExitBtn);
       menuBtns.forEach((b) => b.removeEventListener("click", onMenuClick));
       document.removeEventListener("visibilitychange", onVisibility);

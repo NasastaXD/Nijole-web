@@ -141,6 +141,14 @@
 
 <canvas class="dust" id="dust" aria-hidden="true"></canvas>
 
+<button class="sound-btn" id="soundBtn" type="button" aria-label="Silenciar el sonido" aria-pressed="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path class="spk" d="M4 9.5v5h3.6L13 19V5L7.6 9.5H4z"/>
+    <path class="waves" d="M16 9a4 4 0 0 1 0 6M18.6 6.4a8 8 0 0 1 0 11.2"/>
+    <path class="slash" d="M4 4l16 16"/>
+  </svg>
+</button>
+
 <button class="progress-pill" id="progressPill" type="button" hidden>
   <svg viewBox="-52 -52 104 104" aria-hidden="true"><use href="#rose"/></svg>
   <span id="progressText">Nivel 1 de 10</span>
@@ -226,6 +234,94 @@
   </div>
 </div>
 
+<div class="vn" id="vn" hidden>
+  <svg class="vn-bg" viewBox="0 0 400 800" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="vnSky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#150a2e"/>
+        <stop offset=".55" stop-color="#3a1245"/>
+        <stop offset="1" stop-color="#6b1d3a"/>
+      </linearGradient>
+      <radialGradient id="vnMoon" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#f6e7c4" stop-opacity=".5"/>
+        <stop offset="1" stop-color="#f6e7c4" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="vnCone" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffd98a" stop-opacity=".42"/>
+        <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="vnStreet" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#241028"/>
+        <stop offset="1" stop-color="#0e0612"/>
+      </linearGradient>
+    </defs>
+    <rect width="400" height="800" fill="url(#vnSky)"/>
+    <circle cx="318" cy="150" r="80" fill="url(#vnMoon)"/>
+    <circle cx="318" cy="150" r="30" fill="#f6e7c4"/>
+    <g fill="#f6e7c4" opacity=".7">
+      <circle cx="40" cy="70" r="1.4"/><circle cx="96" cy="130" r="1"/><circle cx="150" cy="60" r="1.6"/>
+      <circle cx="210" cy="110" r="1"/><circle cx="256" cy="52" r="1.2"/><circle cx="372" cy="62" r="1.4"/>
+      <circle cx="60" cy="210" r="1"/><circle cx="188" cy="190" r="1.3"/><circle cx="372" cy="250" r="1"/>
+      <circle cx="120" cy="260" r="1.2"/><circle cx="284" cy="230" r="1"/>
+    </g>
+    <g fill="#2a1038">
+      <rect x="0" y="470" width="46" height="150"/><rect x="46" y="440" width="38" height="180"/>
+      <rect x="84" y="490" width="52" height="130"/><rect x="136" y="455" width="34" height="165"/>
+      <rect x="170" y="500" width="60" height="120"/><rect x="230" y="430" width="40" height="190"/>
+      <rect x="270" y="480" width="48" height="140"/><rect x="318" y="450" width="36" height="170"/>
+      <rect x="354" y="495" width="46" height="125"/>
+    </g>
+    <g fill="#ffd98a" opacity=".75">
+      <rect x="54" y="456" width="5" height="7"/><rect x="66" y="474" width="5" height="7"/>
+      <rect x="146" y="470" width="5" height="7"/><rect x="146" y="494" width="5" height="7"/>
+      <rect x="240" y="446" width="5" height="7"/><rect x="254" y="470" width="5" height="7"/>
+      <rect x="326" y="466" width="5" height="7"/><rect x="326" y="490" width="5" height="7"/>
+      <rect x="96" y="508" width="5" height="7"/><rect x="284" y="498" width="5" height="7"/>
+    </g>
+    <rect x="0" y="600" width="400" height="200" fill="url(#vnStreet)"/>
+    <rect x="0" y="598" width="400" height="4" fill="#3a1b44"/>
+    <polygon points="62,382 18,610 106,610" fill="url(#vnCone)"/>
+    <rect x="60" y="390" width="4" height="214" fill="#0e0612"/>
+    <path d="M62 392c-14 0-24 6-26 12h52c-2-6-12-12-26-12z" fill="#0e0612"/>
+    <ellipse cx="62" cy="406" rx="12" ry="3" fill="#ffd98a"/>
+  </svg>
+
+  <div class="vn-top">
+    <button type="button" class="vn-btn small" id="vnExit">Salir</button>
+    <div class="vn-meter" id="vnMeter">
+      <span class="vn-meter-label">DIGNIDAD</span>
+      <div class="vn-meter-bar" role="img" aria-label="Dignidad">
+        <div class="vn-meter-fill" id="vnFill"></div>
+        <span class="vn-meter-tick" id="vnTick"></span>
+      </div>
+      <span class="vn-meter-value" id="vnValue">50</span>
+      <span class="vn-delta" id="vnDelta" aria-live="polite"></span>
+    </div>
+    <button type="button" class="vn-btn small" id="vnMute" aria-pressed="false">Sonido: sí</button>
+  </div>
+
+  <div class="vn-stage">
+    <img class="vn-sprite" id="vnSprite" src="assets/facu-lo.png" alt="Facu-lo">
+  </div>
+
+  <div class="vn-bottom">
+    <div class="vn-choices" id="vnChoices" hidden></div>
+    <div class="vn-box" id="vnBox" aria-live="polite">
+      <span class="vn-name" id="vnName" hidden></span>
+      <p class="vn-text" id="vnText"></p>
+      <span class="vn-next" id="vnNext" aria-hidden="true" hidden></span>
+    </div>
+  </div>
+
+  <div class="vn-end" id="vnEnd" hidden>
+    <div class="vn-end-card">
+      <h3 id="vnEndTitle"></h3>
+      <p id="vnEndText"></p>
+      <div class="vn-end-btns" id="vnEndBtns"></div>
+    </div>
+  </div>
+</div>
+
 <div class="arcade" id="arcade" hidden>
   <div class="arcade-top">
     <button type="button" class="arcade-btn" id="arcadeExit">Salir</button>
@@ -256,6 +352,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="js/config.js" defer></script>
 <script src="js/manual.js" defer></script>
+<script src="js/audio.js" defer></script>
+<script src="js/facu.js" defer></script>
 <script src="js/battle.js" defer></script>
 <script src="js/game.js" defer></script>
 <script src="js/app.js" defer></script>
