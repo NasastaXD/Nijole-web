@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual de Usagi</title>
+<meta name="theme-color" content="#170206">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Pinyon+Script&family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="gPetal" cx="50%" cy="100%" r="105%">
+      <stop offset="0" stop-color="#22000a"/>
+      <stop offset=".45" stop-color="#6c0618"/>
+      <stop offset=".82" stop-color="#a60c24"/>
+      <stop offset="1" stop-color="#c81830"/>
+    </radialGradient>
+    <radialGradient id="gPetalIn" cx="50%" cy="100%" r="100%">
+      <stop offset="0" stop-color="#160005"/>
+      <stop offset=".55" stop-color="#780819"/>
+      <stop offset="1" stop-color="#c4162e"/>
+    </radialGradient>
+    <radialGradient id="gCup" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#140004" stop-opacity=".7"/>
+      <stop offset=".55" stop-color="#140004" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#140004" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gHeart" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#1c0003"/>
+      <stop offset="1" stop-color="#7a091c"/>
+    </radialGradient>
+    <linearGradient id="gBud" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b3172f"/>
+      <stop offset="1" stop-color="#4a0510"/>
+    </linearGradient>
+    <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4a8a50"/>
+      <stop offset=".55" stop-color="#25552d"/>
+      <stop offset="1" stop-color="#13321a"/>
+    </linearGradient>
+    <linearGradient id="gWing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e2324a"/>
+      <stop offset="1" stop-color="#5a0613"/>
+    </linearGradient>
+    <radialGradient id="gSeal" cx="38%" cy="32%" r="75%">
+      <stop offset="0" stop-color="#f6e2a0"/>
+      <stop offset=".45" stop-color="#cfa34a"/>
+      <stop offset="1" stop-color="#6e4b14"/>
+    </radialGradient>
+    <linearGradient id="gBow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8f1124"/>
+      <stop offset="1" stop-color="#3e040d"/>
+    </linearGradient>
+    <filter id="fPetal" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="1.4" stdDeviation="1.5" flood-color="#160003" flood-opacity=".8"/>
+    </filter>
+    <filter id="fWax" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency=".07" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="6"/>
+    </filter>
+
+    <path id="petal" d="M0,0 C-20,-3 -33,-22 -26,-38 C-21,-47 -8,-50 0,-47 C8,-50 21,-47 26,-38 C33,-22 20,-3 0,0Z"/>
+    <path id="petalRim" d="M-23,-40 C-15,-48 -6,-49 0,-46 C6,-49 15,-48 23,-40" fill="none"/>
+
+    <g id="rose">
+      <g filter="url(#fPetal)">
+        <g fill="url(#gPetal)" stroke="#2a0008" stroke-opacity=".5" stroke-width=".6"><use href="#petal" transform="rotate(0) scale(1)"/><use href="#petal" transform="rotate(72) scale(1)"/><use href="#petal" transform="rotate(144) scale(1)"/><use href="#petal" transform="rotate(216) scale(1)"/><use href="#petal" transform="rotate(288) scale(1)"/></g>
+        <g stroke="#ff6d82" stroke-opacity="0.32" stroke-width="1.5" stroke-linecap="round"><use href="#petalRim" transform="rotate(0) scale(1)"/><use href="#petalRim" transform="rotate(72) scale(1)"/><use href="#petalRim" transform="rotate(144) scale(1)"/><use href="#petalRim" transform="rotate(216) scale(1)"/><use href="#petalRim" transform="rotate(288) scale(1)"/></g>
+      </g>
+      <g filter="url(#fPetal)">
+        <g fill="url(#gPetal)" stroke="#2a0008" stroke-opacity=".5" stroke-width=".6"><use href="#petal" transform="rotate(36) scale(0.8)"/><use href="#petal" transform="rotate(108) scale(0.8)"/><use href="#petal" transform="rotate(180) scale(0.8)"/><use href="#petal" transform="rotate(252) scale(0.8)"/><use href="#petal" transform="rotate(324) scale(0.8)"/></g>
+        <g stroke="#ff6d82" stroke-opacity="0.34" stroke-width="1.7" stroke-linecap="round"><use href="#petalRim" transform="rotate(36) scale(0.8)"/><use href="#petalRim" transform="rotate(108) scale(0.8)"/><use href="#petalRim" transform="rotate(180) scale(0.8)"/><use href="#petalRim" transform="rotate(252) scale(0.8)"/><use href="#petalRim" transform="rotate(324) scale(0.8)"/></g>
+      </g>
+      <g filter="url(#fPetal)">
+        <g fill="url(#gPetalIn)" stroke="#2a0008" stroke-opacity=".5" stroke-width=".6"><use href="#petal" transform="rotate(8) scale(0.6)"/><use href="#petal" transform="rotate(80) scale(0.6)"/><use href="#petal" transform="rotate(152) scale(0.6)"/><use href="#petal" transform="rotate(224) scale(0.6)"/><use href="#petal" transform="rotate(296) scale(0.6)"/></g>
+        <g stroke="#ff6d82" stroke-opacity="0.36" stroke-width="2" stroke-linecap="round"><use href="#petalRim" transform="rotate(8) scale(0.6)"/><use href="#petalRim" transform="rotate(80) scale(0.6)"/><use href="#petalRim" transform="rotate(152) scale(0.6)"/><use href="#petalRim" transform="rotate(224) scale(0.6)"/><use href="#petalRim" transform="rotate(296) scale(0.6)"/></g>
+      </g>
+      <g filter="url(#fPetal)">
+        <g fill="url(#gPetalIn)" stroke="#2a0008" stroke-opacity=".5" stroke-width=".6"><use href="#petal" transform="rotate(52) scale(0.42)"/><use href="#petal" transform="rotate(142) scale(0.42)"/><use href="#petal" transform="rotate(232) scale(0.42)"/><use href="#petal" transform="rotate(322) scale(0.42)"/></g>
+        <g stroke="#ff6d82" stroke-opacity="0.4" stroke-width="2.4" stroke-linecap="round"><use href="#petalRim" transform="rotate(52) scale(0.42)"/><use href="#petalRim" transform="rotate(142) scale(0.42)"/><use href="#petalRim" transform="rotate(232) scale(0.42)"/><use href="#petalRim" transform="rotate(322) scale(0.42)"/></g>
+      </g>
+      <circle r="30" fill="url(#gCup)"/>
+      <circle r="8.5" fill="#1c0006"/>
+      <path d="M0,-7 C6,-7 8,0 4,4 C0,8 -7,5 -6,-1 C-5,-5 -1,-6 1,-3 C3,0 0,3 -2,1" fill="none" stroke="#a8132b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M2,-6 C5,-5 6,-2 5,1" fill="none" stroke="#f05a70" stroke-opacity=".7" stroke-width="1.2" stroke-linecap="round"/>
+    </g>
+
+    <g id="bud">
+      <path d="M0,10 C2,22 -2,32 0,44" fill="none" stroke="#24502c" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M0,-30 C12,-22 15,-4 9,8 C5,14 -5,14 -9,8 C-15,-4 -12,-22 0,-30Z" fill="url(#gBud)"/>
+      <path d="M-8,4 C-6,-10 2,-20 6,-25" fill="none" stroke="#ec5a70" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M0,14 C-10,11 -16,-1 -14,-14 C-9,-4 -5,4 0,8Z" fill="#2f6a38"/>
+      <path d="M0,14 C10,11 16,-1 14,-14 C9,-4 5,4 0,8Z" fill="#2a6033"/>
+      <path d="M0,15 C-3,6 -2,-2 0,-6 C2,-2 3,6 0,15Z" fill="#3b7d45"/>
+    </g>
+
+    <g id="leaf">
+      <path d="M0,0 C3,-10 13,-20 27,-17 C38,-14 46,-6 52,0 C46,6 38,14 27,17 C13,20 3,10 0,0Z" fill="url(#gLeaf)"/>
+      <path d="M3,0 L47,0 M17,0 L27,-10 M17,0 L27,10 M31,0 L39,-6 M31,0 L39,6" fill="none" stroke="#86b98b" stroke-opacity=".38" stroke-width="1"/>
+    </g>
+
+    <g id="butterfly">
+      <path d="M0,0 C-10,-17 -27,-15 -23,-2 C-21,4 -8,4 0,0Z" fill="url(#gWing)"/>
+      <path d="M0,0 C-8,5 -18,13 -12,19 C-6,21 -2,11 0,0Z" fill="url(#gWing)"/>
+      <path d="M0,0 C10,-17 27,-15 23,-2 C21,4 8,4 0,0Z" fill="url(#gWing)"/>
+      <path d="M0,0 C8,5 18,13 12,19 C6,21 2,11 0,0Z" fill="url(#gWing)"/>
+      <path d="M-4,-3 C-10,-8 -16,-9 -19,-5 M4,-3 C10,-8 16,-9 19,-5" fill="none" stroke="#2a0207" stroke-opacity=".6" stroke-width=".8"/>
+      <ellipse rx="1.6" ry="9" fill="#1d0204"/>
+    </g>
+
+    <g id="lips">
+      <path d="M-36,0 C-26,-10 -14,-16 -6,-12 C-3,-11 -1,-9 0,-8 C1,-9 3,-11 6,-12 C14,-16 26,-10 36,0 C24,-2 12,-3 0,-1 C-12,-3 -24,-2 -36,0Z" fill="#a8142c" fill-opacity=".82"/>
+      <path d="M-36,2 C-24,2 -12,3 0,3 C12,3 24,2 36,2 C28,13 14,19 0,19 C-14,19 -28,13 -36,2Z" fill="#a8142c" fill-opacity=".78"/>
+      <path d="M-20,-8 C-19,-4 -19,-2 -20,0 M-11,-11 C-10,-6 -10,-3 -11,-1 M-2,-8 C-1,-5 -1,-3 -2,-1 M8,-11 C9,-6 9,-3 8,-1 M18,-9 C19,-5 19,-2 18,0 M-24,5 C-23,9 -22,11 -20,13 M-14,5 C-13,10 -13,13 -12,16 M-4,5 C-3,10 -3,14 -3,17 M6,5 C6,10 6,14 5,17 M15,5 C15,10 14,13 13,15 M24,5 C24,8 23,10 21,12" fill="none" stroke="#efe6d8" stroke-opacity=".55" stroke-width=".9" stroke-linecap="round"/>
+    </g>
+
+    <g id="seal">
+      <circle r="30" fill="url(#gSeal)" filter="url(#fWax)"/>
+      <circle r="21" fill="none" stroke="#6e4b14" stroke-opacity=".55" stroke-width="2"/>
+      <circle r="19.4" fill="none" stroke="#fbe8ad" stroke-opacity=".4" stroke-width="1"/>
+      <path d="M0,10 C-11,2 -13,-5 -8,-8.5 C-4.5,-11 -1,-9 0,-5.5 C1,-9 4.5,-11 8,-8.5 C13,-5 11,2 0,10Z" fill="#8c6420" stroke="#f8e4a0" stroke-opacity=".55" stroke-width=".9"/>
+    </g>
+
+    <g id="bow">
+      <path d="M-3,4 C-9,18 -18,34 -26,48 L-15,45 L-10,54 C-4,37 0,20 3,6Z" fill="url(#gBow)"/>
+      <path d="M3,4 C9,18 18,34 26,48 L15,45 L10,54 C4,37 0,20 -3,6Z" fill="url(#gBow)"/>
+      <path d="M0,0 C-14,-24 -48,-28 -48,-6 C-48,12 -18,9 0,0Z" fill="url(#gBow)"/>
+      <path d="M0,0 C14,-24 48,-28 48,-6 C48,12 18,9 0,0Z" fill="url(#gBow)"/>
+      <path d="M-6,-4 C-18,-16 -38,-18 -40,-6 M6,-4 C18,-16 38,-18 40,-6" fill="none" stroke="#d2384f" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round"/>
+      <ellipse rx="8" ry="9" fill="#6d0a19"/>
+      <ellipse rx="4" ry="5" cx="-1.5" cy="-2" fill="#a51a2f" fill-opacity=".6"/>
+    </g>
+  </defs>
+</svg>
+
+<canvas class="dust" id="dust" aria-hidden="true"></canvas>
+
+<button class="progress-pill" id="progressPill" type="button" hidden>
+  <svg viewBox="-52 -52 104 104" aria-hidden="true"><use href="#rose"/></svg>
+  <span id="progressText">Nivel 1 de 10</span>
+</button>
+
+<main class="page" id="page">
+
+  <section class="scene scene-envelope" id="sceneEnvelope" aria-label="Sobre cerrado">
+    <h1 class="script-title">Will You Read<br>My Manual?</h1>
+    <div class="envelope" id="envelope">
+      <div class="env-back"></div>
+      <div class="env-slip"><span>For you</span></div>
+      <div class="env-front"></div>
+      <div class="env-flap"></div>
+      <button class="seal" id="sealBtn" type="button" aria-label="Open the envelope">
+        <svg viewBox="-36 -36 72 72" aria-hidden="true"><use href="#seal"/></svg>
+      </button>
+      <span class="open-me" aria-hidden="true">
+        Open me
+        <svg viewBox="0 0 60 40"><path d="M56,6 C44,2 30,6 22,16 C16,24 14,30 12,36 M12,36 L6,27 M12,36 L20,30"/></svg>
+      </span>
+    </div>
+  </section>
+
+  <section class="scene scene-letter" id="sceneLetter" hidden>
+    <div class="torn-wrap letter-wrap">
+      <article class="paper torn letter" id="letter">
+        <h2 class="script letter-hello" id="letterHello"></h2>
+        <div class="letter-body" id="letterBody"></div>
+        <p class="script letter-sign" id="letterSign"></p>
+      </article>
+      <svg class="letter-rose" viewBox="-52 -52 104 104" aria-hidden="true"><use href="#rose"/></svg>
+      <svg class="letter-leaf" viewBox="0 -24 54 48" aria-hidden="true"><use href="#leaf"/></svg>
+      <svg class="letter-kiss" viewBox="-40 -20 80 42" aria-hidden="true"><use href="#lips"/></svg>
+      <div class="mini-envelope" aria-hidden="true">
+        <svg viewBox="-36 -36 72 72"><use href="#seal"/></svg>
+      </div>
+    </div>
+
+    <div class="terms" id="terms">
+      <label class="terms-check" for="acceptTerms">
+        <input type="checkbox" id="acceptTerms">
+        <span id="termsText"></span>
+      </label>
+      <button class="btn-wax" id="beginBtn" type="button" disabled>Begin</button>
+    </div>
+  </section>
+
+  <section class="vine-wrap" id="vineWrap" hidden>
+    <div class="vine" id="vine">
+      <svg class="stem" id="stem" aria-hidden="true"></svg>
+    </div>
+  </section>
+
+  <section class="finale" id="finale" hidden>
+    <svg class="finale-bow" viewBox="-52 -32 104 90" aria-hidden="true"><use href="#bow"/></svg>
+    <div class="torn-wrap">
+      <article class="paper torn finale-card">
+        <p class="eyebrow" id="finaleEyebrow">Premio final</p>
+        <h2 class="script finale-title">Mi manual</h2>
+        <button class="btn-wax" id="manualBtn" type="button" disabled>Descargar el manual (PDF)</button>
+        <p class="finale-status" id="manualStatus" aria-live="polite"></p>
+        <p class="script finale-sign">My Love</p>
+      </article>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <button type="button" class="link-btn" id="resetBtn">Reiniciar progreso</button>
+  </footer>
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-scroll">
+    <div class="torn-wrap sheet-wrap">
+      <div class="paper torn sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+        <button class="sheet-close" id="sheetClose" type="button" aria-label="Cerrar">×</button>
+        <p class="eyebrow" id="sheetEyebrow"></p>
+        <h2 class="script sheet-title" id="sheetTitle"></h2>
+        <div class="sheet-body" id="sheetBody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="arcade" id="arcade" hidden>
+  <div class="arcade-top">
+    <button type="button" class="arcade-btn" id="arcadeExit">Salir</button>
+    <div class="hud">
+      <div class="hud-time"><span class="hud-label">TIEMPO</span><span id="hudTime">60</span></div>
+      <div class="hud-kg"><span class="hud-label">PESO</span><span id="hudKg">10 kg</span></div>
+    </div>
+    <button type="button" class="arcade-btn" id="arcadeMute" aria-pressed="false">Sonido: sí</button>
+  </div>
+  <div class="hud-bar" aria-hidden="true"><div class="hud-fill" id="hudFill"></div><span class="hud-goal">100 kg</span></div>
+  <div class="arcade-stage" id="arcadeStage">
+    <canvas id="gameCanvas" aria-label="Minijuego: El hambre de Usagi"></canvas>
+    <div class="arcade-screen" id="arcadeScreen"></div>
+  </div>
+  <div class="arcade-controls">
+    <button type="button" class="pad" id="padLeft" aria-label="Mover a la izquierda">◀</button>
+    <button type="button" class="pad pad-fire" id="padFire">LENGÜETAZO</button>
+    <button type="button" class="pad" id="padRight" aria-label="Mover a la derecha">▶</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="js/config.js" defer></script>
+<script src="js/manual.js" defer></script>
+<script src="js/game.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>
