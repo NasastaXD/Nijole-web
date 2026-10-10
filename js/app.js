@@ -5,9 +5,11 @@
   const LEVELS = C.niveles;
   const TOTAL = LEVELS.length;
   const BOSS = TOTAL;
-  const KEY = "manual-usagi:v2";
+  const KEY = "manual-usagi:v3";
   const DEV = location.hash === "#dev";
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const Sound = window.Sound;
 
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -68,6 +70,7 @@
   }
 
   function petalBurst(n = 26) {
+    Sound.sfx("bloom");
     if (reducedMotion) return;
     for (let k = 0; k < n; k++) {
       const p = document.createElement("span");
@@ -171,6 +174,7 @@
   }
 
   function showLetter(animate) {
+    if (animate) Sound.sfx("paper");
     $("#sceneEnvelope").hidden = true;
     const letter = $("#sceneLetter");
     letter.hidden = false;
@@ -180,6 +184,7 @@
   $("#sealBtn").addEventListener("click", () => {
     const env = $("#envelope");
     if (env.classList.contains("is-open")) return;
+    Sound.sfx("wax");
     env.classList.add("is-open");
     state.opened = true;
     save();
@@ -221,6 +226,7 @@
   const nodeEl = (i) => $(`.node[data-i="${i}"]`);
 
   function makeNode(i) {
+    if (LEVELS[i].tipo === "jefe") return makeBossNode(i, { sprite: LEVELS[i].sprite, mini: true });
     const node = document.createElement("div");
     node.className = "node" + (i % 2 ? " is-right" : "");
     node.dataset.i = String(i);
@@ -239,22 +245,22 @@
     return node;
   }
 
-  function makeBossNode() {
+  function makeBossNode(i, { sprite = "assets/usagi.png", mini = false } = {}) {
     const node = document.createElement("div");
-    node.className = "node boss" + (BOSS % 2 ? " is-right" : "");
-    node.dataset.i = String(BOSS);
+    node.className = "node boss" + (mini ? " mini" : "") + (i % 2 ? " is-right" : "");
+    node.dataset.i = String(i);
     node.innerHTML = `
       <button class="bloom" type="button">
-        <span class="boss-portrait"><img src="assets/usagi.png" alt=""></span>
+        <span class="boss-portrait${mini ? " is-sprite" : ""}"><img src="${esc(sprite)}" alt=""></span>
         <svg class="boss-rose r1" viewBox="-52 -52 104 104" aria-hidden="true"><use href="#rose"/></svg>
         <svg class="boss-rose r2" viewBox="-52 -52 104 104" aria-hidden="true"><use href="#rose"/></svg>
         <svg class="boss-rose r3" viewBox="-52 -52 104 104" aria-hidden="true"><use href="#rose"/></svg>
       </button>
       <div class="tag">
-        <p class="eyebrow">Jefe final</p>
+        <p class="eyebrow">${mini ? "" : "Jefe final"}</p>
         <p class="tag-title"></p>
       </div>`;
-    node.querySelector(".bloom").addEventListener("click", () => onBloom(BOSS));
+    node.querySelector(".bloom").addEventListener("click", () => onBloom(i));
     return node;
   }
 
@@ -262,7 +268,7 @@
     const vine = $("#vine");
     $$(".node, .bfly", vine).forEach((n) => n.remove());
     for (let i = 0; i < TOTAL; i++) vine.appendChild(makeNode(i));
-    vine.appendChild(makeBossNode());
+    vine.appendChild(makeBossNode(BOSS));
     [1, 4, 7].forEach((k, n) => {
       const b = document.createElement("div");
       b.className = "bfly";
@@ -380,6 +386,7 @@
       return;
     }
     if (i === BOSS) openGame();
+    else if (LEVELS[i].tipo === "jefe") openFacu(i);
     else openSheet(i);
   }
 
@@ -418,6 +425,7 @@
     body.innerHTML = "";
     ({ respuesta: renderRespuesta, meme: renderMeme, rickroll: renderRick, poema: renderPoema })[lv.tipo](lv, i, body);
     $("#sheet").hidden = false;
+    Sound.sfx("paper");
     document.documentElement.style.overflow = "hidden";
     $(".sheet-scroll").scrollTop = 0;
     const focusable = body.querySelector("input, textarea") || $("#sheetClose");
@@ -435,7 +443,8 @@
   });
 
   function nextButtonHTML(i) {
-    const label = i + 1 === BOSS ? "Ir al jefe final" : "Siguiente rosa";
+    const next = LEVELS[i + 1];
+    const label = i + 1 === BOSS ? "Ir al jefe final" : next && next.tipo === "jefe" ? "Ir al jefe" : "Siguiente rosa";
     return `<button class="btn-wax" type="button" data-next>${label}</button>`;
   }
   function wireNext(root, i) {
@@ -447,6 +456,7 @@
     el.className = "feedback" + (kind ? ` is-${kind}` : "");
     el.innerHTML = text;
     if (kind === "bad") {
+      Sound.sfx("bad");
       void el.offsetWidth;
       el.classList.add("shake");
     }
@@ -567,6 +577,7 @@
       $("#memeOk", body).disabled = true;
       $("#memeNo", body).disabled = true;
       setFeedback(fb, "Error: sentido del humor no encontrado. Reiniciando todo por boluda…", "bad");
+      Sound.sfx("trombone");
       setTimeout(resetProgress, 2800);
     });
   }
@@ -684,15 +695,48 @@
         $("#arcade").hidden = true;
         document.documentElement.style.overflow = "";
         dust.resume();
+        Sound.music("romance");
         game = null;
         if (won) {
           setTimeout(() => {
             scrollToEl($("#finale"));
+            Sound.sfx("fanfare");
             petalBurst(36);
           }, 80);
         } else if (lastFocus) {
           lastFocus.focus({ preventScroll: true });
         }
+      },
+    });
+  }
+
+  // ---------- Jefe intermedio: novela visual ----------
+  function openFacu(i) {
+    if (!$("#vn").hidden) return;
+    lastFocus = document.activeElement;
+    $("#vn").hidden = false;
+    // Sin esto, Enter vuelve a "apretar" la rosa que abrió el jefe y reinicia la pelea.
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    $("#vnBox").tabIndex = -1;
+    $("#vnBox").focus({ preventScroll: true });
+    document.documentElement.style.overflow = "hidden";
+    dust.pause();
+    Sound.music("facu");
+    window.FacuVN.open({
+      cfg: C.facu,
+      done: isDone(i),
+      onWin: () => {
+        complete(i);
+        petalBurst(30);
+      },
+      onMigajera: () => resetProgress(),
+      onExit: (won) => {
+        $("#vn").hidden = true;
+        document.documentElement.style.overflow = "";
+        dust.resume();
+        Sound.music("romance");
+        if (won) setTimeout(() => goNext(i), 80);
+        else if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
       },
     });
   }
@@ -752,6 +796,24 @@
     b.textContent = "¿Seguro? Tocá de nuevo para borrar todo";
     setTimeout(() => { b.textContent = "Reiniciar progreso"; }, 4000);
   });
+
+  // ---------- Sonido ----------
+  const soundBtn = $("#soundBtn");
+  function syncSound() {
+    soundBtn.classList.toggle("is-muted", Sound.muted);
+    soundBtn.setAttribute("aria-pressed", String(Sound.muted));
+    soundBtn.setAttribute("aria-label", Sound.muted ? "Activar el sonido" : "Silenciar el sonido");
+  }
+  soundBtn.addEventListener("click", () => Sound.toggle());
+  Sound.onChange(syncSound);
+  syncSound();
+  // El navegador solo deja sonar el audio después de un toque o una tecla.
+  document.addEventListener("pointerdown", () => Sound.unlock(), true);
+  document.addEventListener("keydown", () => Sound.unlock(), true);
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".btn-wax, .bloom, .sheet-close, .progress-pill, .link-btn, .rick-link, .sound-btn")) Sound.sfx("click");
+  }, true);
+  Sound.music("romance");
 
   // ---------- Arranque ----------
   fillLetter();

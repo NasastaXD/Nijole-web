@@ -1,6 +1,8 @@
 # Manual de Usagi
 
-Juego web para Nijole: un sobre lacrado, una carta, una enredadera de rosas (cada una es un nivel, con memes de pausa en el medio), un jefe final con Usagi en dos fases y, al final, un manual en PDF.
+Juego web para Nijole: un sobre lacrado, una carta, una enredadera de rosas (cada una es un nivel, con memes de pausa en el medio), un jefe intermedio (Facu-lo, una novela visual), un jefe final con Usagi en dos fases y, al final, un manual en PDF. Tiene música y efectos de sonido.
+
+El jefe intermedio es **Facu-lo**, una novela visual de decisiones con una barra de DIGNIDAD. Seguir con él pierde y reintenta la pelea; terminar de migajera borra todo el progreso; cortar con DIGNIDAD suficiente (60) pasa al siguiente nivel.
 
 El jefe final:
 
@@ -13,8 +15,13 @@ Todo lo personal está en `js/config.js`:
 
 - `ella` y `carta`: su nombre y la carta de bienvenida (en inglés).
 - `niveles`: las rosas, en el orden en que se juegan. Hay cuatro tipos: `respuesta`, `meme`, `rickroll` y `poema`. Para sumar un meme, copiá un bloque `{ tipo: "meme", ... }`, poné la imagen en `assets/memes/` y apuntá `imagen` a ese archivo. Cada bloque nuevo es una rosa más.
+- `facu`: el guion de la novela visual (escenas, opciones, cuánta DIGNIDAD suma o resta cada una y los tres finales). Está pensado para que le metas chistes que solo ustedes entienden.
 - `jefe`: tiempo y pesos de la primera fase (por defecto 60 s, de 10 kg a 100 kg). Los diálogos y ataques de la segunda fase están en `js/battle.js`.
 - `manual`: el PDF del final. Mientras `pendiente` tenga texto, el PDF es solo ese mensaje ("Aún no hice el manual, cffff. Luego te lo paso"). Cuando el manual esté listo, completá lo que está entre `[corchetes]` y poné `pendiente: null`.
+
+## Sonido
+
+La música y los efectos se sintetizan en el navegador con WebAudio (`js/audio.js`): no hay archivos de audio. Hay cuatro pistas (el sobre y la enredadera, el Space Invaders, la traición de Usagi y Facu-lo). El navegador solo deja sonar el audio después del primer toque, y el botón de arriba a la derecha lo silencia; la preferencia queda guardada.
 
 ## Probarlo
 
