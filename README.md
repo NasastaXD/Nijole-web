@@ -1,6 +1,6 @@
 # Manual de Usagi
 
-Juego web para Nijole: un sobre lacrado, una carta, una enredadera de 10 rosas (cada una es un nivel), un jefe final con Usagi en dos fases y, al final, un manual en PDF.
+Juego web para Nijole: un sobre lacrado, una carta, una enredadera de rosas (cada una es un nivel, con memes de pausa en el medio), un jefe final con Usagi en dos fases y, al final, un manual en PDF.
 
 El jefe final:
 
@@ -12,9 +12,9 @@ El jefe final:
 Todo lo personal está en `js/config.js`:
 
 - `ella` y `carta`: su nombre y la carta de bienvenida (en inglés).
-- `niveles`: las 10 rosas. Hay cuatro tipos: `respuesta`, `meme`, `rickroll` y `poema`. Para sumar un meme, copiá un bloque `{ tipo: "meme", ... }`, poné la imagen en `assets/memes/` y apuntá `imagen` a ese archivo.
+- `niveles`: las rosas, en el orden en que se juegan. Hay cuatro tipos: `respuesta`, `meme`, `rickroll` y `poema`. Para sumar un meme, copiá un bloque `{ tipo: "meme", ... }`, poné la imagen en `assets/memes/` y apuntá `imagen` a ese archivo. Cada bloque nuevo es una rosa más.
 - `jefe`: tiempo y pesos de la primera fase (por defecto 60 s, de 10 kg a 100 kg). Los diálogos y ataques de la segunda fase están en `js/battle.js`.
-- `manual`: el contenido del PDF. Todo lo que está entre `[corchetes]` es para completar.
+- `manual`: el PDF del final. Mientras `pendiente` tenga texto, el PDF es solo ese mensaje ("Aún no hice el manual, cffff. Luego te lo paso"). Cuando el manual esté listo, completá lo que está entre `[corchetes]` y poné `pendiente: null`.
 
 ## Probarlo
 

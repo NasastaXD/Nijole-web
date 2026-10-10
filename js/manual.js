@@ -63,9 +63,41 @@
     });
   }
 
+  // Mientras el manual no esté listo: una página con el mensaje de CONFIG.manual.pendiente.
+  function buildPendiente(JsPDF, text, usagi) {
+    const doc = new JsPDF({ unit: "mm", format: "a5", compress: true });
+    doc.setFillColor(...WINE_DARK);
+    doc.rect(0, 0, PAGE_W, PAGE_H, "F");
+    doc.setDrawColor(...GOLD);
+    doc.setLineWidth(0.6);
+    doc.rect(7, 7, PAGE_W - 14, PAGE_H - 14, "S");
+    if (usagi) {
+      const ih = 76;
+      const iw = (ih * usagi.w) / usagi.h;
+      doc.addImage(usagi.url, "PNG", (PAGE_W - iw) / 2, 30, iw, ih);
+    }
+    const [head, ...rest] = clean(text).split(/\.\s+/);
+    let y = 128;
+    doc.setFont("times", "italic");
+    doc.setFontSize(22);
+    doc.setTextColor(...CREAM);
+    doc.splitTextToSize(`${head}.`, CONTENT_W - 8).forEach((line) => {
+      doc.text(line, PAGE_W / 2, y, { align: "center" });
+      y += 9.5;
+    });
+    if (rest.length) {
+      y += 3;
+      doc.setFontSize(16);
+      doc.setTextColor(...GOLD);
+      doc.text(`${rest.join(". ").replace(/\.$/, "")}.`, PAGE_W / 2, y, { align: "center" });
+    }
+    return doc.output("blob");
+  }
+
   async function build(C, extra) {
     const JsPDF = await waitForJsPDF();
     const m = C.manual;
+    if (m.pendiente) return buildPendiente(JsPDF, m.pendiente, await loadImageDataURL("assets/usagi.png"));
     const doc = new JsPDF({ unit: "mm", format: "a5", compress: true });
     const usagi = await loadImageDataURL("assets/usagi.png");
     let y = TOP;

@@ -674,7 +674,7 @@ button { font: inherit; color: inherit; }
   transform: rotate(-2deg);
   position: relative;
 }
-.polaroid img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+.polaroid img { display: block; width: 100%; height: auto; max-height: min(52vh, 440px); object-fit: contain; }
 .polaroid::before {
   content: "";
   position: absolute;

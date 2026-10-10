@@ -5,7 +5,7 @@
   const LEVELS = C.niveles;
   const TOTAL = LEVELS.length;
   const BOSS = TOTAL;
-  const KEY = "manual-usagi:v1";
+  const KEY = "manual-usagi:v2";
   const DEV = location.hash === "#dev";
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -546,10 +546,10 @@
   function renderMeme(lv, i, body) {
     body.innerHTML = `
       <figure class="polaroid">
-        <img src="${esc(lv.imagen)}" alt="${esc(lv.alt)}" width="736" height="736">
+        <img src="${esc(lv.imagen)}" alt="${esc(lv.alt)}">
         <figcaption>${esc(lv.titulo)}</figcaption>
       </figure>
-      <p>${esc(lv.texto)}</p>
+      ${lv.texto ? `<p>${esc(lv.texto)}</p>` : ""}
       <div class="sheet-actions">
         <button class="btn-wax" type="button" id="memeOk">Ya me reí, sigamos</button>
         <button class="btn-wax ghost" type="button" id="memeNo">No me dio risa</button>

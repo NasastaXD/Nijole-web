@@ -7,7 +7,8 @@
  *   meme       → imagen chistosa de intermedio
  *   rickroll   → link a YouTube que hay que abrir para pasar
  *   poema      → texto libre con validación
- * Para agregar más memes: copiá un bloque { tipo: "meme", ... } y cambiá la imagen.
+ * Para agregar más memes: copiá un bloque { tipo: "meme", ... }, poné la imagen en assets/memes/
+ * y cambiá "imagen". "texto" es opcional. Cada bloque nuevo es una rosa más; el orden de la lista es el orden del juego.
  */
 window.CONFIG = {
   ella: "Nijole",
@@ -66,6 +67,13 @@ window.CONFIG = {
       especiales: { 67: "No, no todo es 67. Casi todo, pero esto no." },
     },
     {
+      tipo: "meme",
+      tema: "Intermedio",
+      titulo: "Clase de programación",
+      imagen: "assets/memes/kurimanju-javascript.jpg",
+      alt: "Meme: Kurimanju con un video titulado «cómo hacer marihuana usando maizena y javascript».",
+    },
+    {
       tipo: "respuesta",
       tema: "Trigonometría",
       titulo: "La escalera del amor",
@@ -75,6 +83,13 @@ window.CONFIG = {
       respuesta: 4,
       pista: "h = 8 · sin(30°), y sin(30°) = 1/2.",
       exito: "4 metros. Perfecto, ya sé qué escalera comprar.",
+    },
+    {
+      tipo: "meme",
+      tema: "Intermedio",
+      titulo: "Anuncio importante",
+      imagen: "assets/memes/kurimanju-sucs.jpg",
+      alt: "Meme: Chiikawa llorando con el título «Me voy para siempre porque solo tengo 2 sucs».",
     },
     {
       tipo: "rickroll",
@@ -120,6 +135,13 @@ window.CONFIG = {
       especiales: { 76: "Al revés. De menor a mayor, genia." },
     },
     {
+      tipo: "meme",
+      tema: "Intermedio",
+      titulo: "Hora de los elogios",
+      imagen: "assets/memes/frieren-elogios.jpg",
+      alt: "Panel de Frieren: «Feel free to praise me more».",
+    },
+    {
       tipo: "respuesta",
       tema: "Cálculo",
       titulo: "La integral final",
@@ -129,6 +151,13 @@ window.CONFIG = {
       respuesta: 12,
       pista: "Una antiderivada es <i>x</i><sup>3</sup> + <i>x</i><sup>2</sup>. Evaluala en 2 y restale lo que da en 0.",
       exito: "12. Sobreviviste al cálculo. Ahora viene lo difícil: Usagi tiene hambre.",
+    },
+    {
+      tipo: "meme",
+      tema: "Intermedio",
+      titulo: "Una advertencia",
+      imagen: "assets/memes/gato-ultimo.jpg",
+      alt: "Meme: un gato con el texto «El que ríe al último ríe al final».",
     },
   ],
 
@@ -141,6 +170,8 @@ window.CONFIG = {
 
   // Contenido del PDF. Lo que está entre [corchetes] es para que lo completes vos.
   manual: {
+    // Mientras tenga texto, el PDF es solo este mensaje. Cuando el manual esté listo, poné pendiente: null y se genera el manual completo de abajo.
+    pendiente: "Aún no hice el manual, cffff. Luego te lo paso",
     producto: "Novio",
     modelo: "Modelo 2026 · Rev. 1.0",
     numeroSerie: "SN-0067-2026",
