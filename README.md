@@ -28,6 +28,6 @@ Para saltar el candado de los niveles mientras probás, abrí la página con `#d
 
 ## Publicarlo
 
-Cada etiqueta `v*` que se sube al repo (por ejemplo `git tag v1.0.1 && git push origin v1.0.1`) dispara `.github/workflows/release.yml`, que arma `manual-de-usagi-<versión>.zip` y lo publica como release. Las instrucciones para subirlo a Hostinger están en `.github/release-notes.md`.
+Subir una rama `release/vX.Y.Z` (por ejemplo `git push origin HEAD:refs/heads/release/v1.0.1`) o una etiqueta `vX.Y.Z` dispara `.github/workflows/release.yml`, que arma `manual-de-usagi-vX.Y.Z.zip` y lo publica como release. Las instrucciones para subirlo a Hostinger están en `.github/release-notes.md`.
 
 También sirve GitHub Pages: Settings → Pages → Deploy from a branch → `main` / root.
