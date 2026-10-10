@@ -373,7 +373,7 @@
     font(["helvetica", "normal"], 9.2, INK);
     const certLines = doc.splitTextToSize(
       clean(
-        `Se certifica que ${C.ella} superó 10 rosas, resolvió precálculo, trigonometría y una integral, escribió un poema al 67 y alimentó a Usagi hasta los ${extra.kg} kg. Queda habilitada para operar este producto de por vida.`
+        `Se certifica que ${C.ella} superó 10 rosas, resolvió precálculo, trigonometría y una integral, escribió un poema al 67, alimentó a Usagi hasta los ${extra.kg} kg, sobrevivió a su traición y la perdonó. Queda habilitada para operar este producto de por vida.`
       ),
       CONTENT_W - 16
     );

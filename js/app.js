@@ -14,7 +14,7 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
   // ---------- Estado ----------
-  const fresh = () => ({ opened: false, started: false, done: [], poem: "", poemDraft: "", bossKg: 0, bossFails: 0 });
+  const fresh = () => ({ opened: false, started: false, done: [], poem: "", poemDraft: "", bossKg: 0, bossFails: 0, bossStage: 0, battleFails: 0 });
   let state = load();
 
   function load() {
@@ -166,7 +166,7 @@
   function fillLetter() {
     $("#letterHello").textContent = C.carta.saludo;
     $("#letterBody").innerHTML = C.carta.parrafos.map((p) => `<p>${esc(p)}</p>`).join("");
-    $("#letterSign").innerHTML = `${esc(C.carta.despedida)}<small>${esc(C.firma)}</small>`;
+    $("#letterSign").textContent = C.carta.despedida;
     $("#termsText").textContent = C.carta.terminos;
   }
 
@@ -666,16 +666,24 @@
     dust.pause();
     game = window.UsagiGame.open({
       cfg: C.jefe,
+      stage: state.bossStage,
       fails: state.bossFails,
+      battleFails: state.battleFails,
       done: isDone(BOSS),
       onLose: () => {
         state.bossFails++;
         save();
       },
-      onWin: (kg) => {
+      onPhase1Win: (kg) => {
         state.bossKg = Math.max(state.bossKg, kg);
-        complete(BOSS);
+        state.bossStage = 1;
+        save();
       },
+      onBattleLose: () => {
+        state.battleFails++;
+        save();
+      },
+      onWin: () => complete(BOSS),
       onExit: (won) => {
         $("#arcade").hidden = true;
         document.documentElement.style.overflow = "";

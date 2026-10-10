@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#170206">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Pinyon+Script&family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Pixelify+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -229,12 +229,12 @@
   <div class="arcade-top">
     <button type="button" class="arcade-btn" id="arcadeExit">Salir</button>
     <div class="hud">
-      <div class="hud-time"><span class="hud-label">TIEMPO</span><span id="hudTime">60</span></div>
-      <div class="hud-kg"><span class="hud-label">PESO</span><span id="hudKg">10 kg</span></div>
+      <div><span class="hud-label" id="hudLabelA">TIEMPO</span><span id="hudA">60</span></div>
+      <div><span class="hud-label" id="hudLabelB">PESO</span><span id="hudB">10 kg</span></div>
     </div>
     <button type="button" class="arcade-btn" id="arcadeMute" aria-pressed="false">Sonido: sí</button>
   </div>
-  <div class="hud-bar" aria-hidden="true"><div class="hud-fill" id="hudFill"></div><span class="hud-goal">100 kg</span></div>
+  <div class="hud-bar" aria-hidden="true"><div class="hud-fill" id="hudFill"></div><span class="hud-goal" id="hudGoal">100 kg</span></div>
   <div class="arcade-stage" id="arcadeStage">
     <canvas id="gameCanvas" aria-label="Minijuego: El hambre de Usagi"></canvas>
     <div class="arcade-screen" id="arcadeScreen"></div>
@@ -244,11 +244,18 @@
     <button type="button" class="pad pad-fire" id="padFire">LENGÜETAZO</button>
     <button type="button" class="pad" id="padRight" aria-label="Mover a la derecha">▶</button>
   </div>
+  <div class="battle-menu" id="battleMenu">
+    <button type="button" class="ut-btn" disabled>LUCHAR</button>
+    <button type="button" class="ut-btn" disabled>ACTUAR</button>
+    <button type="button" class="ut-btn" disabled>OBJETO</button>
+    <button type="button" class="ut-btn" disabled>PIEDAD</button>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="js/config.js" defer></script>
 <script src="js/manual.js" defer></script>
+<script src="js/battle.js" defer></script>
 <script src="js/game.js" defer></script>
 <script src="js/app.js" defer></script>
 </body>

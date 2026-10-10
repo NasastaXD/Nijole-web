@@ -11,13 +11,11 @@
  */
 window.CONFIG = {
   ella: "Nijole",
-  firma: "Your boyfriend (and part-time game dev)",
 
   carta: {
     saludo: "To my favorite person,",
     parrafos: [
       "I made you a little web game. Partly for the laughs, partly as an excuse to practice coding video games in HTML. So please, don't take it too seriously.",
-      "Down this vine there are ten roses, and each one is a level: some precalculus, a bit of trigonometry, a poem, one integral and a few surprises in between. After that comes the final boss: Usagi and her bottomless appetite.",
       "Beat everything and you unlock my official user manual, with all you need to know about what I like, what makes me happy, and how to operate me properly.",
       "Two more things. I love you very, very much. And by continuing, you agree to cosplay Maomao or Frieren, sooner or later. This clause is non-negotiable.",
       "Good luck. You will need it.",

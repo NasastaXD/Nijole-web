@@ -21,7 +21,7 @@
     "Usagi dice que así no se puede vivir.",
   ];
   const EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
-  const ARCADE_FONT = '"Press Start 2P", ui-monospace, monospace';
+  const ARCADE_FONT = '"Pixelify Sans", ui-monospace, monospace';
   const SPRITE_ASPECT = 201 / 370;
   const MOUTH = { x: 0.473, y: 0.263 };
 
@@ -32,6 +32,8 @@
 
   const usagiImg = new Image();
   usagiImg.src = "assets/usagi.png";
+  const fatSprite = new Image();
+  fatSprite.src = "assets/usagi-gorda.png";
 
   const emojiCache = new Map();
   function emojiSprite(ch, size) {
@@ -86,17 +88,27 @@
       case "go": tone(1320, t, 0.18, "square", 0.04); break;
       case "win": [523, 659, 784, 1046, 784, 1046, 1318].forEach((f, k) => tone(f, t + k * 0.11, 0.16, "square", 0.045)); break;
       case "lose": [392, 330, 262, 196].forEach((f, k) => tone(f, t + k * 0.16, 0.22, "triangle", 0.06)); break;
+      case "betray": tone(220, t, 0.9, "sawtooth", 0.05, 55); tone(110, t + 0.5, 1.2, "square", 0.04, 40); break;
+      case "blip": tone(660, t, 0.03, "square", 0.018); break;
+      case "blipUsagi": tone(330, t, 0.04, "square", 0.022); break;
+      case "move": tone(520, t, 0.04, "square", 0.025); break;
+      case "select": tone(780, t, 0.06, "square", 0.03); break;
+      case "hit": tone(160, t, 0.18, "square", 0.05, 90); break;
+      case "hurt": tone(300, t, 0.14, "sawtooth", 0.06, 120); break;
+      case "heal": [660, 880, 1100].forEach((f, k) => tone(f, t + k * 0.06, 0.08, "triangle", 0.05)); break;
+      case "break": tone(200, t, 0.08, "square", 0.07); tone(140, t + 0.5, 0.3, "sawtooth", 0.06, 50); break;
+      case "spare": [392, 523, 659, 784].forEach((f, k) => tone(f, t + k * 0.12, 0.2, "triangle", 0.05)); break;
     }
   }
 
-  function open({ cfg, fails: startFails, done, onWin, onLose, onExit }) {
+  function open({ cfg, stage: bossStage, fails: startFails, battleFails: startBattleFails, done, onPhase1Win, onLose, onBattleLose, onWin, onExit }) {
+    const arcade = $("arcade");
     const stage = $("arcadeStage");
     const canvas = $("gameCanvas");
     const ctx = canvas.getContext("2d");
     const screen = $("arcadeScreen");
-    const hudTime = $("hudTime");
-    const hudKg = $("hudKg");
-    const hudFill = $("hudFill");
+    const hudEls = { la: $("hudLabelA"), a: $("hudA"), lb: $("hudLabelB"), b: $("hudB"), fill: $("hudFill"), goal: $("hudGoal") };
+    const menuBtns = [...document.querySelectorAll("#battleMenu .ut-btn")];
     const touchUI = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
     const GOAL = cfg.pesoMeta;
@@ -104,8 +116,11 @@
     const SECONDS = cfg.segundos;
 
     let fails = startFails;
+    let battleFails = startBattleFails;
     let W = 0, H = 0, dpr = 1;
-    let mode = "intro"; // intro | countdown | play | over
+    let mode = "intro"; // intro | countdown | play | over | transform | battle-intro | battle | battle-over | won
+    let scene = "invaders";
+    let transformT = 0;
     let raf = 0;
     let last = 0;
     let countdown = 0;
@@ -119,7 +134,52 @@
     const stars = [];
 
     const mercy = () => 1 + 0.25 * Math.min(fails, 4);
+    const battleHp = () => 20 + 4 * Math.min(battleFails, 4);
 
+    function setHud(la, a, lb, b, pct, goal) {
+      const set = (el, v) => { if (el.textContent !== v) el.textContent = v; };
+      set(hudEls.la, la);
+      set(hudEls.a, a);
+      set(hudEls.lb, lb);
+      set(hudEls.b, b);
+      set(hudEls.goal, goal);
+      hudEls.fill.style.width = `${clamp(pct * 100, 0, 100)}%`;
+    }
+
+    const battle = window.UsagiBattle.create({
+      ctx,
+      size: () => ({ W, H }),
+      sfx,
+      hud: setHud,
+      menu: menuBtns,
+      onDeath: () => {
+        mode = "battle-over";
+        battleFails++;
+        onBattleLose();
+        showScreen(`
+          <h3>GAME OVER</h3>
+          <p>¡No te rindas! Mantené tu DETERMINACIÓN.</p>
+          <p>Tu DETERMINACIÓN aumentó: ahora tenés ${battleHp()} HP.</p>
+          <div class="row">
+            <button type="button" class="arcade-go" data-act="rebattle">REINTENTAR</button>
+            <button type="button" class="arcade-go alt" data-act="exit">SALIR</button>
+          </div>`);
+      },
+      onWin: () => {
+        mode = "won";
+        sfx("win");
+        onWin();
+        showScreen(`
+          <h3>GANASTE</h3>
+          <p>Perdonaste a Usagi. Ganaste 0 EXP, 0 de oro y un manual.</p>
+          <div class="row"><button type="button" class="arcade-go" data-act="prize">VER MI PREMIO</button></div>`);
+      },
+    });
+
+    function render(now) {
+      if (scene === "battle") battle.draw(now);
+      else draw(now);
+    }
     function resize() {
       const r = stage.getBoundingClientRect();
       dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -132,7 +192,8 @@
       player.x = clamp(player.x * (W / oldW), 0, W);
       stars.length = 0;
       for (let k = 0; k < 46; k++) stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.3 + 0.3, p: Math.random() * 6.28 });
-      if (mode !== "play") draw(performance.now());
+      battle.relayout();
+      if (mode !== "play" && mode !== "battle") render(performance.now());
     }
 
     function reset() {
@@ -155,7 +216,7 @@
       tongue.len = 0;
       tongue.caught = null;
       spawnWave(false);
-      updateHud(true);
+      updateHud();
     }
 
     function spawnWave(announce) {
@@ -192,12 +253,8 @@
       };
     }
 
-    function updateHud(force) {
-      const shownKg = Math.max(0, Math.round(kg));
-      const t = Math.ceil(timeLeft);
-      if (force || hudKg.textContent !== `${shownKg} kg`) hudKg.textContent = `${shownKg} kg`;
-      if (force || hudTime.textContent !== String(t)) hudTime.textContent = String(t);
-      hudFill.style.width = `${clamp((kg / GOAL) * 100, 0, 100)}%`;
+    function updateHud() {
+      setHud("TIEMPO", String(Math.ceil(timeLeft)), "PESO", `${Math.max(0, Math.round(kg))} kg`, kg / GOAL, `${GOAL} kg`);
     }
 
     function addFloater(text, x, y, color) {
@@ -519,7 +576,7 @@
       ctx.lineJoin = "round";
       if (floaters) for (const f of floaters) {
         ctx.globalAlpha = clamp(f.t * 1.6, 0, 1);
-        ctx.font = `10px ${ARCADE_FONT}`;
+        ctx.font = `600 15px ${ARCADE_FONT}`;
         ctx.lineWidth = 4;
         ctx.strokeStyle = "#1a0207";
         ctx.strokeText(f.text, f.x, f.y);
@@ -530,7 +587,7 @@
 
       const centerText = mode === "countdown" ? (countdown > 0.6 ? String(Math.ceil(countdown - 0.6)) : "¡ÑAM!") : banner ? banner.text : "";
       if (centerText) {
-        ctx.font = `${mode === "countdown" ? 34 : 16}px ${ARCADE_FONT}`;
+        ctx.font = `700 ${mode === "countdown" ? 48 : 24}px ${ARCADE_FONT}`;
         ctx.lineWidth = 6;
         ctx.strokeStyle = "#1a0207";
         ctx.strokeText(centerText, W / 2, H * 0.48);
@@ -538,6 +595,46 @@
         ctx.fillText(centerText, W / 2, H * 0.48);
       }
       ctx.restore();
+    }
+
+    // Al llegar a la meta Usagi crece, la pantalla se apaga y empieza la traición.
+    function drawTransform(now) {
+      draw(now);
+      const p = clamp(transformT / 2.6, 0, 1);
+      ctx.fillStyle = `rgba(0,0,0,${clamp(p * 1.6, 0, 1)})`;
+      ctx.fillRect(0, 0, W, H);
+      const b = body();
+      const grow = clamp((p - 0.15) / 0.6, 0, 1);
+      const h = b.h + (Math.min(H * 0.42, 260) - b.h) * grow;
+      const w = h * (420 / 457);
+      const cx = player.x + (W / 2 - player.x) * grow;
+      const bottom = b.bottom + (H * 0.62 - b.bottom) * grow;
+      const shakeX = p > 0.2 && p < 0.8 ? rand(-4, 4) : 0;
+      ctx.drawImage(fatSprite, cx - w / 2 + shakeX, bottom - h, w, h);
+      if (p > 0.45 && p < 0.55) {
+        ctx.fillStyle = `rgba(255,255,255,${1 - Math.abs(p - 0.5) * 20})`;
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
+    function transform() {
+      mode = "transform";
+      transformT = 0;
+      tongue.state = "idle";
+      tongue.len = 0;
+      onPhase1Win(Math.round(kg));
+      sfx("betray");
+    }
+
+    function enterBattle(firstTime) {
+      scene = "battle";
+      arcade.classList.add("is-battle");
+      screen.innerHTML = "";
+      mode = "battle";
+      battle.start(firstTime, battleHp());
+      last = performance.now();
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(loop);
     }
 
     function loop(now) {
@@ -550,9 +647,20 @@
         if (countdown <= 0) { mode = "play"; sfx("go"); }
       } else if (mode === "play") {
         update(dt);
+      } else if (mode === "transform") {
+        transformT += dt;
+        if (transformT >= 2.6) {
+          enterBattle(true);
+          return;
+        }
+        drawTransform(now);
+        raf = requestAnimationFrame(loop);
+        return;
+      } else if (mode === "battle") {
+        battle.update(dt);
       }
-      draw(now);
-      if (mode === "countdown" || mode === "play") raf = requestAnimationFrame(loop);
+      render(now);
+      if (mode === "countdown" || mode === "play" || mode === "battle" || mode === "transform") raf = requestAnimationFrame(loop);
     }
 
     function start() {
@@ -573,13 +681,8 @@
       tongue.len = 0;
       const final = Math.round(kg);
       if (won) {
-        sfx("win");
-        onWin(final);
-        showScreen(`
-          <h3>¡USAGI PESA ${final} kg!</h3>
-          <p>Misión cumplida. Usagi está feliz, redonda y lista para la siesta. Se comió ${eaten} dulces en ${Math.max(1, Math.round(SECONDS - timeLeft))} segundos.</p>
-          <p>Desbloqueaste el manual.</p>
-          <div class="row"><button type="button" class="arcade-go" data-act="prize">VER MI PREMIO</button></div>`);
+        mode = "play";
+        transform();
       } else {
         sfx("lose");
         fails++;
@@ -631,34 +734,63 @@
       draw(performance.now());
     }
 
+    function battleIntro() {
+      mode = "battle-intro";
+      scene = "battle";
+      arcade.classList.add("is-battle");
+      const controls = touchUI
+        ? "Arrastrá el dedo para mover el corazón. Tocá la pantalla para pasar los diálogos."
+        : "Flechas para mover el corazón. Z o ENTER para elegir y avanzar.";
+      battle.start(false, battleHp());
+      showScreen(`
+        <h3>USAGI TE TRAICIONÓ</h3>
+        <p>Usagi pesa 100 kg y todavía tiene hambre. Esquivá sus ataques durante 7 turnos y perdonala.</p>
+        <p>${controls}</p>
+        ${battleFails ? `<p>DETERMINACIÓN: ${battleHp()} HP.</p>` : ""}
+        <div class="row"><button type="button" class="arcade-go" data-act="battle">PELEAR</button></div>`);
+      battle.draw(performance.now());
+    }
+
     // ---------- Entrada ----------
     function onScreenClick(e) {
       const btn = e.target.closest("button[data-act]");
       if (!btn) return;
       const act = btn.dataset.act;
       if (act === "start" || act === "retry") start();
+      else if (act === "battle" || act === "rebattle") enterBattle(false);
       else if (act === "prize") close(true);
       else if (act === "exit") close(false);
     }
 
     const MOVE_KEYS = { ArrowLeft: "left", a: "left", A: "left", ArrowRight: "right", d: "right", D: "right" };
     function onKeyDown(e) {
+      if (e.key === "Escape") return close(false);
+      if (scene === "battle") {
+        if (mode === "battle") battle.key(e, true);
+        return;
+      }
       if (MOVE_KEYS[e.key]) { keys[MOVE_KEYS[e.key]] = true; e.preventDefault(); }
       else if (e.key === " " || e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
         if (mode === "play") { fire(); e.preventDefault(); }
       } else if (e.key === "Escape") close(false);
     }
     function onKeyUp(e) {
+      if (scene === "battle") return battle.key(e, false);
       if (MOVE_KEYS[e.key]) keys[MOVE_KEYS[e.key]] = false;
     }
 
     let drag = null;
     function onPointerDown(e) {
+      if (mode === "battle") {
+        canvas.setPointerCapture(e.pointerId);
+        return battle.pointerDown(e);
+      }
       if (mode !== "play") return;
       canvas.setPointerCapture(e.pointerId);
       drag = { id: e.pointerId, x0: e.clientX, px: player.x, t: performance.now(), moved: 0 };
     }
     function onPointerMove(e) {
+      if (mode === "battle") return battle.pointerMove(e);
       if (!drag || e.pointerId !== drag.id) return;
       const dx = e.clientX - drag.x0;
       drag.moved = Math.max(drag.moved, Math.abs(dx));
@@ -666,6 +798,7 @@
       player.x = clamp(drag.px + dx * 1.2, b.w / 2, W - b.w / 2);
     }
     function onPointerUp(e) {
+      if (scene === "battle") return battle.pointerUp(e);
       if (!drag || e.pointerId !== drag.id) return;
       if (drag.moved < 10 && performance.now() - drag.t < 320) fire();
       drag = null;
@@ -694,12 +827,16 @@
       muteBtn.setAttribute("aria-pressed", String(muted));
     };
     const onMute = () => { muted = !muted; syncMute(); };
-    const onExitBtn = () => close(mode === "over" && kg >= GOAL);
+    const onExitBtn = () => close(mode === "won");
+    const onMenuClick = (e) => {
+      const i = menuBtns.indexOf(e.currentTarget);
+      if (i >= 0 && mode === "battle") battle.pickAction(i);
+    };
     const onVisibility = () => { last = performance.now(); };
 
     if (location.hash === "#dev") {
       window.__usagiDebug = () => ({
-        mode, kg, timeLeft, W, H, tongue: tongue.state, mouthX: body().mouthX,
+        mode, scene, kg, timeLeft, W, H, tongue: tongue.state, mouthX: body().mouthX,
         foods: (foods || []).filter((f) => f.alive).map((f) => ({ x: foodX(f), y: foodY(f), healthy: f.healthy, c: f.c })),
       });
     }
@@ -718,6 +855,7 @@
     firePad.addEventListener("pointerdown", onFirePad);
     muteBtn.addEventListener("click", onMute);
     $("arcadeExit").addEventListener("click", onExitBtn);
+    menuBtns.forEach((b) => b.addEventListener("click", onMenuClick));
     document.addEventListener("visibilitychange", onVisibility);
     syncMute();
 
@@ -737,17 +875,23 @@
       firePad.removeEventListener("pointerdown", onFirePad);
       muteBtn.removeEventListener("click", onMute);
       $("arcadeExit").removeEventListener("click", onExitBtn);
+      menuBtns.forEach((b) => b.removeEventListener("click", onMenuClick));
       document.removeEventListener("visibilitychange", onVisibility);
       keys.left = keys.right = false;
+      battle.releaseKeys();
+      arcade.classList.remove("is-battle");
       screen.innerHTML = "";
       onExit(won);
     }
 
     resize();
-    const fontsReady = document.fonts && document.fonts.load ? document.fonts.load(`10px ${ARCADE_FONT}`).catch(() => {}) : Promise.resolve();
-    intro();
-    fontsReady.then(() => { if (mode === "intro") draw(performance.now()); });
-    usagiImg.decode?.().then(() => { if (mode === "intro") draw(performance.now()); }).catch(() => {});
+    const fontsReady = document.fonts && document.fonts.load ? document.fonts.load(`600 15px ${ARCADE_FONT}`).catch(() => {}) : Promise.resolve();
+    if (bossStage >= 1 && !done) battleIntro();
+    else intro();
+    const redraw = () => { if (mode === "intro" || mode === "battle-intro") render(performance.now()); };
+    fontsReady.then(redraw);
+    usagiImg.decode?.().then(redraw).catch(() => {});
+    fatSprite.decode?.().then(redraw).catch(() => {});
 
     return { close };
   }

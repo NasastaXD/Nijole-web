@@ -17,9 +17,10 @@
   --good: #2f7a45;
   --arcade-pink: #ff7aa2;
 
-  --font-script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive;
-  --font-body: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-arcade: "Press Start 2P", ui-monospace, "Courier New", monospace;
+  --font-hand: "Great Vibes", "Snell Roundhand", "Apple Chancery", cursive;
+  --font-display: "Playfair Display", "Didot", Georgia, serif;
+  --font-body: "Lora", "Iowan Old Style", Georgia, serif;
+  --font-arcade: "Pixelify Sans", ui-monospace, "Courier New", monospace;
 
   --col: 460px;
   --gutter: 16px;
@@ -40,8 +41,8 @@ body {
   background-attachment: fixed;
   color: var(--cream);
   font-family: var(--font-body);
-  font-size: 19px;
-  line-height: 1.5;
+  font-size: 17.5px;
+  line-height: 1.6;
   font-variant-numeric: lining-nums;
   overflow-x: hidden;
 }
@@ -73,12 +74,12 @@ h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
 p { margin: 0; }
 i { font-style: italic; }
 
-.script { font-family: var(--font-script); font-weight: 400; }
+.script { font-family: var(--font-display); font-style: italic; font-weight: 500; }
 
 .eyebrow {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 11.5px;
   letter-spacing: .16em;
   text-transform: uppercase;
 }
@@ -100,9 +101,9 @@ button { font: inherit; color: inherit; }
   background: radial-gradient(120% 140% at 30% 20%, var(--rose-hi), var(--rose) 45%, #6d0718);
   color: #fff3ec;
   font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: .04em;
+  font-weight: 600;
+  font-size: 16.5px;
+  letter-spacing: .03em;
   cursor: pointer;
   box-shadow: 0 6px 0 #4a0410, 0 12px 26px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .25);
   transition: transform .15s ease, box-shadow .15s ease, filter .2s;
@@ -134,7 +135,7 @@ button { font: inherit; color: inherit; }
 .scene-envelope.is-leaving { opacity: 0; transform: translateY(-30px); }
 
 .script-title {
-  font-family: var(--font-script);
+  font-family: var(--font-hand);
   font-size: clamp(42px, 12vw, 58px);
   line-height: 1.15;
   text-align: center;
@@ -163,7 +164,7 @@ button { font: inherit; color: inherit; }
   display: grid; place-items: start center;
   padding-top: 8%;
   color: var(--ink);
-  font-family: var(--font-script);
+  font-family: var(--font-hand);
   font-size: 26px;
   transition: transform .9s cubic-bezier(.2, .8, .2, 1) .45s;
   z-index: 1;
@@ -220,7 +221,7 @@ button { font: inherit; color: inherit; }
   position: absolute;
   right: -6px; bottom: -48px;
   display: flex; align-items: center; gap: 2px;
-  font-family: var(--font-script);
+  font-family: var(--font-hand);
   font-size: 30px;
   color: var(--cream);
   transform: rotate(7deg);
@@ -266,17 +267,15 @@ button { font: inherit; color: inherit; }
   flex-direction: column;
   gap: 18px;
 }
-.letter-hello { font-size: 36px; line-height: 1.2; text-align: center; }
+.letter-hello { font-size: 28px; line-height: 1.25; text-align: center; }
 .letter-body { display: flex; flex-direction: column; gap: 14px; }
 .letter-body p {
   font-style: italic;
-  font-weight: 500;
-  font-size: 19.5px;
-  line-height: 1.55;
+  font-size: 17px;
+  line-height: 1.7;
   text-align: center;
 }
-.letter-sign { font-size: 30px; line-height: 1.2; text-align: center; margin-top: 6px; }
-.letter-sign small { display: block; font-family: var(--font-body); font-style: italic; font-size: 16px; color: var(--ink-soft); margin-top: 8px; }
+.letter-sign { font-family: var(--font-hand); font-style: normal; font-weight: 400; font-size: 40px; line-height: 1.2; text-align: center; margin-top: 6px; }
 
 .letter-rose {
   position: absolute;
@@ -327,8 +326,8 @@ button { font: inherit; color: inherit; }
   gap: 12px;
   align-items: flex-start;
   font-style: italic;
-  font-size: 17px;
-  line-height: 1.45;
+  font-size: 15.5px;
+  line-height: 1.55;
   color: var(--cream);
   cursor: pointer;
 }
@@ -437,7 +436,7 @@ button { font: inherit; color: inherit; }
 
 .tag { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .tag .eyebrow { color: var(--muted); font-size: 12px; }
-.tag-title { font-family: var(--font-script); font-size: 30px; line-height: 1.15; color: var(--cream); }
+.tag-title { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 23px; line-height: 1.2; color: var(--cream); }
 .node.is-locked .tag-title { opacity: .55; }
 
 .bfly {
@@ -503,10 +502,10 @@ button { font: inherit; color: inherit; }
   text-align: center;
 }
 .finale-card .eyebrow { color: var(--ink-soft); }
-.finale-title { font-size: 46px; line-height: 1.1; }
+.finale-title { font-size: 38px; line-height: 1.15; }
 .finale-status { min-height: 1.5em; font-size: 16px; font-style: italic; color: var(--ink-soft); }
 .finale-status:empty { display: none; }
-.finale-sign { font-size: 34px; margin-top: 4px; }
+.finale-sign { font-family: var(--font-hand); font-style: normal; font-weight: 400; font-size: 40px; margin-top: 4px; }
 .finale.is-unlocked .finale-bow { animation: bloom-in 1s cubic-bezier(.2, 1.4, .4, 1) both; }
 
 .foot {
@@ -575,7 +574,7 @@ button { font: inherit; color: inherit; }
   gap: 6px;
 }
 .sheet-card .eyebrow { color: var(--ink-soft); padding-right: 34px; }
-.sheet-title { font-size: 40px; line-height: 1.15; padding-right: 24px; }
+.sheet-title { font-size: 30px; line-height: 1.2; padding-right: 24px; }
 .sheet-close {
   position: absolute;
   top: 18px; right: 14px;
@@ -588,14 +587,15 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
 }
 .sheet-body { display: flex; flex-direction: column; gap: 16px; margin-top: 10px; }
-.sheet-body > p { font-size: 19.5px; line-height: 1.5; font-weight: 500; }
+.sheet-body > p { font-size: 17.5px; line-height: 1.6; }
 
 .formula {
   padding: 18px 10px;
   border-block: 1px solid rgba(106, 16, 32, .25);
   text-align: center;
-  font-size: clamp(24px, 7vw, 30px);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: clamp(23px, 6.6vw, 28px);
+  font-weight: 500;
   font-variant-numeric: lining-nums;
   line-height: 1.4;
   overflow-x: auto;
@@ -615,8 +615,8 @@ button { font: inherit; color: inherit; }
   background: transparent;
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 500;
   font-variant-numeric: lining-nums;
   border-radius: 0;
 }
@@ -633,24 +633,25 @@ button { font: inherit; color: inherit; }
   color: var(--ink);
   font-family: var(--font-body);
   font-style: italic;
-  font-size: 19px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.6;
   resize: vertical;
 }
 .poem-input:focus { outline: 2px solid var(--rose); outline-offset: 1px; }
 .poem-meta { font-size: 15px; color: var(--ink-soft); font-style: italic; }
 .poem-out {
   white-space: pre-line;
-  font-family: var(--font-script);
-  font-size: 27px;
-  line-height: 1.35;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 21px;
+  line-height: 1.5;
   text-align: center;
   padding: 10px 6px;
 }
 
 .sheet .link-btn { color: var(--ink-soft); font-size: 17px; }
 
-.feedback { min-height: 1.4em; font-style: italic; font-size: 18px !important; }
+.feedback { min-height: 1.4em; font-style: italic; font-size: 16.5px !important; }
 .feedback.is-bad { color: #9a1b2f; }
 .feedback.is-good { color: var(--good); font-weight: 600 !important; }
 .feedback.shake { animation: shake .4s ease; }
@@ -660,7 +661,7 @@ button { font: inherit; color: inherit; }
   padding: 12px 14px;
   border-left: 3px solid var(--gold);
   background: rgba(210, 169, 79, .14);
-  font-size: 17.5px !important;
+  font-size: 16px !important;
 }
 .sheet-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; margin-top: 4px; }
 
@@ -683,7 +684,7 @@ button { font: inherit; color: inherit; }
   rotate: 3deg;
   background: rgba(225, 205, 170, .75);
 }
-.polaroid figcaption { padding-top: 10px; text-align: center; font-family: var(--font-script); font-size: 24px; color: var(--ink); }
+.polaroid figcaption { padding-top: 10px; text-align: center; font-family: var(--font-display); font-style: italic; font-size: 19px; color: var(--ink); }
 
 .rick-link {
   align-self: center;
@@ -747,12 +748,12 @@ button { font: inherit; color: inherit; }
   border-radius: 6px;
   background: transparent;
   font-family: var(--font-arcade);
-  font-size: 9px;
+  font-size: 14px;
   cursor: pointer;
 }
-.hud { display: flex; gap: 18px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.hud { display: flex; gap: 22px; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .hud > div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.hud-label { font-size: 8px; color: var(--muted); letter-spacing: .1em; }
+.hud-label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: .12em; }
 .hud-bar {
   position: relative;
   width: 100%;
@@ -764,7 +765,7 @@ button { font: inherit; color: inherit; }
   background: rgba(0, 0, 0, .35);
 }
 .hud-fill { height: 100%; width: 0; background: linear-gradient(90deg, #ffb3c4, var(--arcade-pink), #ff3d6e); transition: width .2s; }
-.hud-goal { position: absolute; right: 4px; top: 50%; translate: 0 -50%; font-size: 7px; color: #fff; text-shadow: 0 1px 0 #000; }
+.hud-goal { position: absolute; right: 4px; top: 50%; translate: 0 -50%; font-size: 10px; color: #fff; text-shadow: 0 1px 0 #000; }
 .arcade-stage {
   position: relative;
   flex: 1 1 auto;
@@ -790,9 +791,9 @@ button { font: inherit; color: inherit; }
   line-height: 1.7;
 }
 .arcade-screen:empty { display: none; }
-.arcade-screen h3 { font-size: 16px; line-height: 1.5; color: var(--arcade-pink); }
-.arcade-screen p { font-size: 9.5px; color: var(--cream); max-width: 34ch; }
-.arcade-screen .big { font-size: 40px; color: #fff; }
+.arcade-screen h3 { font-size: 24px; font-weight: 700; line-height: 1.3; color: var(--arcade-pink); }
+.arcade-screen p { font-size: 15px; color: var(--cream); max-width: 32ch; }
+.arcade-screen .big { font-size: 48px; font-weight: 700; color: #fff; }
 .arcade-screen .rules { display: flex; flex-direction: column; gap: 10px; text-align: left; }
 .arcade-screen .rules p { display: flex; gap: 10px; align-items: center; }
 .arcade-screen .rules .em { font-size: 20px; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
@@ -805,7 +806,8 @@ button { font: inherit; color: inherit; }
   background: var(--arcade-pink);
   color: #2b0410;
   font-family: var(--font-arcade);
-  font-size: 12px;
+  font-size: 17px;
+  font-weight: 700;
   cursor: pointer;
   box-shadow: 0 5px 0 #a3355a;
 }
@@ -825,15 +827,52 @@ button { font: inherit; color: inherit; }
   border-radius: 12px;
   background: rgba(255, 255, 255, .06);
   font-family: var(--font-arcade);
-  font-size: 18px;
+  font-size: 22px;
   cursor: pointer;
   touch-action: none;
 }
-.pad-fire { font-size: 10px; background: rgba(255, 122, 162, .22); border-color: var(--arcade-pink); color: #ffd9e3; }
+.pad-fire { font-size: 16px; font-weight: 700; background: rgba(255, 122, 162, .22); border-color: var(--arcade-pink); color: #ffd9e3; }
 .pad.is-down { background: rgba(255, 255, 255, .2); }
 @media (hover: hover) and (pointer: fine) {
   .arcade-controls { display: none; }
 }
+
+/* Fase 2: combate tipo Undertale */
+.battle-menu {
+  display: none;
+  width: 100%;
+  max-width: 520px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.ut-btn {
+  appearance: none;
+  height: 54px;
+  padding: 0 4px;
+  border: 3px solid #ff8a2b;
+  border-radius: 2px;
+  background: #000;
+  color: #ff8a2b;
+  font-family: var(--font-arcade);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+.ut-btn:disabled { opacity: .4; cursor: default; }
+.ut-btn.is-selected, .ut-btn.is-spare { border-color: #ffe14d; color: #ffe14d; }
+.ut-btn.is-spare:not(:disabled) { animation: spare-glow 1s ease-in-out infinite alternate; }
+@keyframes spare-glow { to { box-shadow: 0 0 14px rgba(255, 225, 77, .6); } }
+.arcade.is-battle { background: #000; }
+.arcade.is-battle .battle-menu { display: grid; }
+.arcade.is-battle .arcade-controls { display: none; }
+.arcade.is-battle .arcade-stage { border-color: transparent; }
+.arcade.is-battle .hud-bar { background: #b30000; border-color: #fff; }
+.arcade.is-battle .hud-fill { background: #ffe14d; }
+.arcade.is-battle .arcade-screen { background: rgba(0, 0, 0, .9); }
+.arcade.is-battle .arcade-screen h3 { color: #fff; }
+.arcade.is-battle .arcade-go { background: #ff8a2b; color: #000; box-shadow: 0 5px 0 #a8501a; }
+.arcade.is-battle .arcade-go.alt { background: transparent; color: #fff; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .6); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
