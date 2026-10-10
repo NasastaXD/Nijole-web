@@ -1,0 +1,36 @@
+name: Release
+
+# Se dispara al subir una etiqueta v* o una rama release/v*.
+# Con la rama, GitHub crea la etiqueta al publicar el release.
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - "release/v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Versión
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then v="$GITHUB_REF_NAME"; else v="${GITHUB_REF_NAME#release/}"; fi
+          echo "VERSION=$v" >> "$GITHUB_ENV"
+
+      - name: Armar el zip del sitio
+        run: zip -r "manual-de-usagi-${VERSION}.zip" index.html css js assets
+
+      - name: Publicar la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$VERSION" "manual-de-usagi-${VERSION}.zip" \
+            --target "$GITHUB_SHA" \
+            --title "Manual de Usagi ${VERSION}" \
+            --notes-file .github/release-notes.md
